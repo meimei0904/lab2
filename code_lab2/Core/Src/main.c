@@ -95,8 +95,78 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  setTimer1(1);
+  setTimer2(5);
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_All, GPIO_PIN_SET); // Tắt tất cả chân trên PORTA
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_All, GPIO_PIN_SET);
+  int state = 0;
   while (1)
   {
+//	  if (timer2_flag == 1)
+//	  	  {
+//	  		  setTimer2(1000);
+//	  		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+//	  	  }
+//
+//	  	  if(timer1_flag == 1)
+//	  	  {
+//	  		  setTimer1(500);
+//	  		  switch (state)
+//	  		  {
+//	  		  case 0:
+//	  			  display7SEG(1);  // number "1" on the first 7-segment
+//	  		      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET); // Enable first LED
+//	  		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);   // Disable second LED
+//	  		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+//	  		      HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+//	  		      state = 1;
+//	  		  break;
+//	  		  case 1:
+//	  			  display7SEG(2);
+//	  		      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+//	  		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+//	  		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+//	  		      HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+//	  		      state = 2;
+//	  		  break;
+//	  		  case 2:
+//	  			  display7SEG(3);  // number "1" on the first 7-segment
+//	  		      HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET); // Enable first LED
+//	  		      HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);   // Disable second LED
+//	  		      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+//	  		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+//	  		      state = 3;
+//	  		  break;
+//	  		  case 3:
+//	  			  display7SEG(0);  // number "2" on the second 7-segment
+//	  			  HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);   // Disable first LED
+//	  			  HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET); // Enable second LED
+//	  		      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+//	  		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+//	  			  state = 0;
+//	  		  break;
+//
+//	  	   }
+//	  	  }
+	  if(timer1_flag == 1)
+	  	  {
+	  		  setTimer1(500);
+	  		  if(state == 0)
+	  		  {
+	  			  display7SEG(1);  // number "1" on the first 7-segment
+	  		      HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET); // Enable first LED
+	  		      HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);   // Disable second LED
+	  		      state = 1;
+	  		  }
+	  		  else
+	  		  {
+	  			  display7SEG(2);  // number "2" on the second 7-segment
+	  			  HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);   // Disable first LED
+	  			  HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET); // Enable second LED
+	  			  state = 0;
+	  		  }
+	  	  }
+
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
