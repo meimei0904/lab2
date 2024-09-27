@@ -168,3 +168,27 @@ void display7SEG(int num)
 		 HAL_GPIO_WritePin(SEG_5_GPIO_Port, SEG_5_Pin, RESET);
 	}
 }
+
+void update7SEG(int index)
+{
+	switch (index)
+	{
+	case 0:
+		display7SEG(led_buffer[index]);
+		break;
+
+	case 1:
+		display7SEG(led_buffer[index]);
+			break;
+
+	case 2:
+		display7SEG(led_buffer[index]);
+			break;
+
+	case 3:
+		display7SEG(led_buffer[index]);
+			break;
+	default:
+		break;
+	}
+}
