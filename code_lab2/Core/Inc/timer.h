@@ -18,6 +18,7 @@ extern int index_led;
 extern int led_buffer[MAX_LED];
 
 void update7SEG(int index);
+void updateClockBuffer();
 
 void display7SEG(int num);
 void setTimer1(int duration);

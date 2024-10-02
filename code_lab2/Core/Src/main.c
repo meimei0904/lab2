@@ -65,6 +65,7 @@ int led_buffer[MAX_LED] = {2, 3, 5, 6};
   * @brief  The application entry point.
   * @retval int
   */
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -96,29 +97,34 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  setTimer2(1);
-  setTimer3(8);
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_All, GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_All, GPIO_PIN_SET);
+  int hour = 5, minute = 10, second = 50;
   while (1)
   {
-	  	  if (timer2_flag == 1)
-	  	  {
-	  		  setTimer2(1000);
-	  		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-	  	  }
-
-	  	  if (timer3_flag == 1)
-	  	  {
-	  		  setTimer3(500);
-	  		  update7SEG(index_led);
-	  		  index_led++;
-	  		  if (index_led >= MAX_LED)
-	  		  {
-	  			index_led = 0;
-	  		  }
-	  	  }
-
+	  second++;
+	  if (second>=60)
+	  {
+		  second = 0;
+		  minute++;
+	  }
+	  if (minute>=60)
+	  {
+		  minute = 0;
+		  hour++;
+	  }
+	  if (hour>=24)
+	  {
+		  hour = 0;
+	  }
+	  updateClockBuffer(hour, minute);
+	  update7SEG(index_led);
+	  index_led++;
+	  if (index_led >= MAX_LED)
+	  {
+		  index_led = 0;
+	  }
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
