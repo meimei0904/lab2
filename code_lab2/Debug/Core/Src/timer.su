@@ -3,3 +3,5 @@ timer.c:25:6:setTimer2	16	static
 timer.c:31:6:setTimer3	16	static
 timer.c:37:6:timerRun	4	static
 timer.c:67:6:display7SEG	16	static
+timer.c:172:6:update7SEG	16	static
+timer.c:209:6:updateClockBuffer	16	static
