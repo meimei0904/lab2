@@ -16,6 +16,9 @@ int timer2_flag = 0;
 int timer3_counter = 0;
 int timer3_flag = 0;
 
+int timer4_counter = 0;
+int timer4_flag = 0;
+
 void setTimer1(int duration)
 {
 	timer1_counter = duration/TICK;
@@ -34,6 +37,12 @@ void setTimer3(int duration)
 	timer3_flag = 0;
 }
 
+void setTimer4(int duration)
+{
+	timer4_counter = duration/TICK;
+	timer4_flag = 0;
+}
+
 void timerRun()
 {
 	if(timer1_counter > 0)
@@ -46,22 +55,31 @@ void timerRun()
 	}
 
 	if(timer2_counter > 0)
-		{
-			timer2_counter --;
-		}
-		if(timer2_counter <= 0)
-		{
-			timer2_flag = 1;
-		}
+	{
+		timer2_counter --;
+	}
+	if(timer2_counter <= 0)
+	{
+		timer2_flag = 1;
+	}
 
 	if(timer3_counter > 0)
-			{
-				timer3_counter --;
-			}
-			if(timer3_counter <= 0)
-			{
-				timer3_flag = 1;
-			}
+	{
+		timer3_counter --;
+	}
+	if(timer3_counter <= 0)
+	{
+		timer3_flag = 1;
+	}
+
+	if(timer4_counter > 0)
+	{
+		timer4_counter --;
+	}
+	if(timer4_counter <= 0)
+	{
+		timer4_flag = 1;
+	}
 }
 
 void display7SEG(int num)
@@ -168,3 +186,52 @@ void display7SEG(int num)
 		 HAL_GPIO_WritePin(SEG_5_GPIO_Port, SEG_5_Pin, RESET);
 	}
 }
+
+//----------------------------------------------------------------------
+void update7SEG(int index)
+{
+	switch(index)
+	{
+		case 0:
+			display7SEG(led_buffer[0]);
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, RESET);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+			break;
+		case 1:
+			display7SEG(led_buffer[1]);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, RESET);
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+			break;
+		case 2:
+			display7SEG(led_buffer[2]);
+			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, RESET);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, SET);
+			break;
+		case 3:
+			display7SEG(led_buffer[3]);
+			HAL_GPIO_WritePin(EN3_GPIO_Port, EN3_Pin, RESET);
+			HAL_GPIO_WritePin(EN1_GPIO_Port, EN1_Pin, SET);
+			HAL_GPIO_WritePin(EN0_GPIO_Port, EN0_Pin, SET);
+			HAL_GPIO_WritePin(EN2_GPIO_Port, EN2_Pin, SET);
+			break;
+		default:
+			break;
+	}
+}
+
+void updateClockBuffer(int hour, int minute)
+{
+	led_buffer[0] = hour/10;
+	led_buffer[1] = hour%10;
+	led_buffer[2] = minute/10;
+	led_buffer[3] = minute%10;
+}
+
+//------------------------------------------------Ex9_10----------------
+

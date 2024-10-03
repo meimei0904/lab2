@@ -52,7 +52,68 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_TIM2_Init(void);
 /* USER CODE BEGIN PFP */
+int index_led = 0;
+int led_buffer[MAX_LED] = {2, 3, 5, 6};
 
+//----------------------------------------Ex9_10--------------------
+const uint8_t matrixColEnable[8] = {
+	0xfe,
+	0xfd,
+	0xfb,
+	0xf7,
+	0xef,
+	0xdf,
+	0xbf,
+	0x7f
+};
+
+GPIO_TypeDef * LEDMatrixRowPort[8] = {
+	ROW0_GPIO_Port,
+	ROW1_GPIO_Port,
+	ROW2_GPIO_Port,
+	ROW3_GPIO_Port,
+	ROW4_GPIO_Port,
+	ROW5_GPIO_Port,
+	ROW6_GPIO_Port,
+	ROW7_GPIO_Port
+};
+
+const uint16_t LEDMatrixRowPin[8] = {
+	ROW0_Pin,
+	ROW1_Pin,
+	ROW2_Pin,
+	ROW3_Pin,
+	ROW4_Pin,
+	ROW5_Pin,
+	ROW6_Pin,
+	ROW7_Pin
+};
+
+GPIO_TypeDef * LEDMatrixColPort[8] = {
+	ENM0_GPIO_Port,
+	ENM1_GPIO_Port,
+	ENM2_GPIO_Port,
+	ENM3_GPIO_Port,
+	ENM4_GPIO_Port,
+	ENM5_GPIO_Port,
+	ENM6_GPIO_Port,
+	ENM7_GPIO_Port
+};
+
+const uint16_t LEDMatrixColPin[8] = {
+	ENM0_Pin,
+	ENM1_Pin,
+	ENM2_Pin,
+	ENM3_Pin,
+	ENM4_Pin,
+	ENM5_Pin,
+	ENM6_Pin,
+	ENM7_Pin
+};
+
+const int MAX_LED_MATRIX = 8;
+int index_led_matrix = 0;
+uint8_t matrix_buffer[8] = {0xff, 0x80, 0x77, 0x77, 0x77, 0x77, 0x80, 0xff};
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -64,6 +125,67 @@ static void MX_TIM2_Init(void);
   * @brief  The application entry point.
   * @retval int
   */
+
+void displayLEDMatrixCol(int num)
+{
+	for(int i = 0; i < MAX_LED_MATRIX; i++)
+		HAL_GPIO_WritePin(LEDMatrixRowPort[i], LEDMatrixRowPin[i], (matrix_buffer[num] >> i) & 0x01);
+}
+
+void enableLEDMatrixCol(int num)
+{
+	for(int i = 0; i < MAX_LED_MATRIX; i++)
+		HAL_GPIO_WritePin(LEDMatrixColPort[i], LEDMatrixColPin[i], (matrixColEnable[num] >> i) & 0x01);
+}
+
+void updateLEDMatrix(int index)
+{
+	switch (index)
+	{
+		case 0:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 1:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 2:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 3:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 4:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 5:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 6:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		case 7:
+			enableLEDMatrixCol(index);
+			displayLEDMatrixCol(index);
+			break;
+		default:
+			break;
+	}
+}
+
+void updateLedMatrixBuffer()
+{
+	matrix_buffer[7] = matrix_buffer[0];
+	for (int i = 0; i < 7; i++)
+		matrix_buffer[i] = matrix_buffer[i+1];
+}
+
 int main(void)
 {
   /* USER CODE BEGIN 1 */
@@ -95,8 +217,57 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
+  HAL_GPIO_WritePin(GPIOA, GPIO_PIN_All, GPIO_PIN_SET);
+  HAL_GPIO_WritePin(GPIOB, GPIO_PIN_All, GPIO_PIN_SET);
+  setTimer1(10);
+  setTimer2(10);
+  setTimer3(10);
+  setTimer4(10);
+  int hour = 06, minute = 20, second = 55;
+  updateClockBuffer(hour, minute);
   while (1)
   {
+	  if (timer1_flag == 1)
+	  {
+		  setTimer1(1000);
+		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+	  }
+	  if (timer2_flag == 1)
+	  {
+		  setTimer2(500);
+	  	  update7SEG(index_led);
+		  index_led++;
+		  if (index_led >= MAX_LED)
+		  {
+			  index_led = 0;
+		  }
+	  }
+	  if (timer3_flag == 1)
+	  {
+		  setTimer3(1000);
+		  second++;
+	  	  if (second >= 60)
+	  	  {
+	  		  second = 0;
+	  		  minute++;
+	  	  }
+	  	  if(minute >= 60)
+	  	  {
+	  		  minute = 0;
+	  		  hour++;
+		  }
+	  	  if(hour >=24)
+	  	  {
+	  		  hour = 0;
+	  	  }
+	  	  updateClockBuffer(hour, minute);
+	  }
+	  if (timer4_flag == 1)
+	  {
+		  setTimer4(10);
+		  if(index_led_matrix >= 8) index_led_matrix = 0;
+	  	  updateLEDMatrix(index_led_matrix++);
+	  }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
