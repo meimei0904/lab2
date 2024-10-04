@@ -20,7 +20,6 @@
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
 #include "timer.h"
-#include <stdbool.h>
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
@@ -58,8 +57,6 @@ int led_buffer[MAX_LED] = {2, 3, 5, 6};
 const int MAX_LED_MATRIX = 8;
 int index_led_matrix = 0;
 uint8_t matrix_buffer[8] = {0x00,0x66,0xff,0xff,0xff,0x7e,0x3c,0x18};
-//------------------------------------------dich trai------------------------
-uint8_t matrix_buffser_old[8] = {0x00,0x66,0xff,0xff,0xff,0x7e,0x3c,0x18};
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
@@ -169,27 +166,7 @@ void updateLEDMatrix(int index){
 
 	setColums(matrix_buffer[index]);
 }
-//-------------------------------------------------dich trai-----------------------------
-void shiftLeft(uint8_t* Matrix){
-	for(int i=0;i<MAX_LED_MATRIX;i++){
-		Matrix[i] = Matrix[i] << 1;
-	}
-}
 
-bool isemptyMatrix(uint8_t* Matrix){
-	for(int i=0;i<MAX_LED_MATRIX;i++){
-		if(Matrix[i] != 0){
-			return false;
-		}
-	}
-
-	return true;
-}
-void resetMatrix(){
-	for(int i=0;i<MAX_LED_MATRIX;i++){
-		matrix_buffer[i] = matrix_buffser_old[i];
-	}
-}
 
 int main(void)
 {
@@ -224,50 +201,50 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_All, GPIO_PIN_SET);
   HAL_GPIO_WritePin(GPIOB, GPIO_PIN_All, GPIO_PIN_SET);
-//  setTimer1(10);
-//  setTimer2(10);
-//  setTimer3(10);
+  setTimer1(10);
+  setTimer2(10);
+  setTimer3(10);
   setTimer4(500);
-//  int hour = 06, minute = 20, second = 55;
-//  updateClockBuffer(hour, minute);
+  int hour = 06, minute = 20, second = 55;
+  updateClockBuffer(hour, minute);
   clearRow();
   while (1)
   {
-//	  if (timer1_flag == 1)
-//	  {
-//		  setTimer1(1000);
-//		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
-//	  }
-//	  if (timer2_flag == 1)
-//	  {
-//		  setTimer2(500);
-//	  	  update7SEG(index_led);
-//		  index_led++;
-//		  if (index_led >= MAX_LED)
-//		  {
-//			  index_led = 0;
-//		  }
-//	  }
-//	  if (timer3_flag == 1)
-//	  {
-//		  setTimer3(1000);
-//		  second++;
-//	  	  if (second >= 60)
-//	  	  {
-//	  		  second = 0;
-//	  		  minute++;
-//	  	  }
-//	  	  if(minute >= 60)
-//	  	  {
-//	  		  minute = 0;
-//	  		  hour++;
-//		  }
-//	  	  if(hour >=24)
-//	  	  {
-//	  		  hour = 0;
-//	  	  }
-//	  	  updateClockBuffer(hour, minute);
-//	  }
+	  if (timer1_flag == 1)
+	  {
+		  setTimer1(1000);
+		  HAL_GPIO_TogglePin(DOT_GPIO_Port, DOT_Pin);
+	  }
+	  if (timer2_flag == 1)
+	  {
+		  setTimer2(500);
+	  	  update7SEG(index_led);
+		  index_led++;
+		  if (index_led >= MAX_LED)
+		  {
+			  index_led = 0;
+		  }
+	  }
+	  if (timer3_flag == 1)
+	  {
+		  setTimer3(1000);
+		  second++;
+	  	  if (second >= 60)
+	  	  {
+	  		  second = 0;
+	  		  minute++;
+	  	  }
+	  	  if(minute >= 60)
+	  	  {
+	  		  minute = 0;
+	  		  hour++;
+		  }
+	  	  if(hour >=24)
+	  	  {
+	  		  hour = 0;
+	  	  }
+	  	  updateClockBuffer(hour, minute);
+	  }
 	  if (timer4_flag == 1)
 	  {
 		  updateLEDMatrix(index_led_matrix++);
@@ -277,13 +254,6 @@ int main(void)
 		  		setTimer4(50);
 	  }
 
-	  if(timer5_flag == 1){
-	  		 shiftLeft(matrix_buffer);
-	  		 if(isemptyMatrix(matrix_buffer)){
-	  			 resetMatrix();
-	  		 }
-	  		 setTimer5(300);
-	  	 }
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
