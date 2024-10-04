@@ -113,7 +113,7 @@ int main(void)
 	  }
 	  if (timer2_flag == 1)
 	  {
-		  setTimer2(500);
+		  setTimer2(250);
 	  	  update7SEG(index_led);
 		  index_led++;
 		  if (index_led >= MAX_LED)
